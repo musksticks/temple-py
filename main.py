@@ -171,12 +171,13 @@ while True:
             # Defeated the guardian
             if guardianhealth == 0:
                 print(f"{Fore.GREEN}Congratulations! You defeated the Guardian and completed the game!{Fore.WHITE}")
+                print(f"You completed the game in {turn} turns")
                 gameStarted = 0
                 break
             elif lives == 0:
                 print("You were defeated by the Guardian. Game over.")
                 gameStarted = 0
-                break
+                continue
 
     # ERROR HANDLING
     except ValueError:
