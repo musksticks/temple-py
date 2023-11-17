@@ -2,7 +2,9 @@ from random import randint
 from colorama import Fore
 
 # VARIABLES
-lives = 2
+turn = 0
+lives = 3
+guardianhealth = 3
 gameStarted = 0
 
 def coinflip():
@@ -15,7 +17,7 @@ def coinflip():
     
 # GAME
 while True:
-    turn =+ 1
+    turn += 1
 
     try:
         if gameStarted == 0:
@@ -35,8 +37,8 @@ while True:
                 nans = input("You walk into a room with a chest. Do you open it? (Y)es, (N)o: ")
 
                 if nans.upper() == "Y":
-                    lives += 1
-                    print("You open the chest and recieve another life, you also proceed to the next floor.")
+                    lives += 2
+                    print("You open the chest and recieve +2 life, you also proceed to the next floor.")
                     area = 2
                 if nans.upper() == "N":
                     print("You ignore the chest and proceed to the next floor.")
@@ -65,6 +67,7 @@ while True:
                     gameStarted = 0
                 else: 
                     print(f"You still have {lives} lives")
+                    continue
 
             if ans.upper() == "W": #COMPLETE, FLOOR 3 OR BACK
                 wans = input("You find a mysterious tunnel. Do you enter it? (Y)es, (N)o: ")
@@ -77,28 +80,103 @@ while True:
                     print("You go back to the other room")
                     continue
 
+        # AREA 2
         if gameStarted == 1 and area == 2:
             ans = input("You find yourself in a dark room with two doors.\n(N)orth or (S)outh: ")
 
-            if ans.upper() == "N":  # Northern path
+            if ans.upper() == "N":  # 
                 tans = input("You enter a room with a talking statue.\nDo you (L)isten or (I)gnore? ")
 
                 if tans.upper() == "L":
                     print("The statue tells you a riddle and grants you access to the next floor.")
                     area = 3
                 elif tans.upper() == "I":
-                    print("You choose to ignore the statue and proceed.")
-                    area = 3
+                    print("The statue doesnt take that kindly and smashes you to pieces.")
+                    lives -= 1
+                    if lives == 0:
+                        gameStarted = 0
+                    else: 
+                        print(f"You still have {lives} lives")
+                        continue
 
-            elif ans.upper() == "S":  # Southern path
-                dans = input("You encounter a deep pit. Do you (J)ump over or (G)o around? ")
+            if ans.upper() == "S":  # 
+                dans = input("You encounter a deep pit. Do you (J)ump in or (G)o around? ")
 
                 if dans.upper() == "J":
-                    print("You successfully jump over the pit and proceed to the next area.")
-                    area = 3
+                    print("You jump into the pit and die.")
+                    lives -= 1
+                    if lives == 0:
+                        gameStarted = 0
+                    else: 
+                        print(f"You still have {lives} lives")
                 elif dans.upper() == "G":
                     print("You choose to go around the pit and proceed to the next area.")
                     area = 3
+
+        # AREA 3 - BOSS FIGHT
+        if gameStarted == 1 and area == 3:
+            print("You enter the final floor to find the Guardian of the Temple!")
+        
+            choice = input("The Guardian is about to attack! Do you (A)ttack, (D)efend, or (R)un? ")
+
+            if choice.upper() == "A":
+                print("You attack the dragon!")
+                attack = randint(0, 1)
+                if attack == 0:
+                    guardianhealth -= 1
+                    print(f"You hit the Guardian! {guardianhealth}/3")
+                    lives -= 1
+                    if lives == 0:
+                        gameStarted = 0
+                        break
+                    else:
+                        print(f"You still have {lives} lives")
+                else:
+                    print(f"Your attack misses, and the Guardian counterattacks! {lives}/3")
+                    lives -= 1
+                    if lives == 0:
+                        gameStarted = 0
+                        break
+                    else:
+                        print(f"You still have {lives} lives")
+
+            elif choice.upper() == "D":
+                print("You defend against the Guardian's attack.")
+                defense = randint(0, 1)
+                if defense == 0:
+                    guardianhealth -= 1
+                    print(f"Your defense holds, and you counterattack! {guardianhealth}/3")
+                else:
+                    lives -= 1
+                    print(f"Your defense fails, and the dragon hits you! {lives}/3")
+                    if lives == 0:
+                        gameStarted = 0
+                        break
+                    else:
+                        print(f"You still have {lives} lives")
+
+            elif choice.upper() == "R":
+                print("You try to run, but the Guardian catches you!")
+                lives -= 1
+                if lives == 0:
+                    gameStarted = 0
+                    break
+                else:
+                    print(f"You still have {lives} lives")
+
+            else:
+                print("Invalid choice. Try again.")
+                continue
+
+            # Defeated the dragon
+            if guardianhealth == 0:
+                print(f"{Fore.GREEN}Congratulations! You defeated the Guardian and completed the game!{Fore.WHITE}")
+                gameStarted = 0
+                break
+            elif lives == 0:
+                print("You were defeated by the Guardian. Game over.")
+                gameStarted = 0
+                break
 
     # ERROR HANDLING
     except ValueError:
