@@ -120,7 +120,7 @@ while True:
             choice = input("The Guardian is about to attack! Do you (A)ttack, (D)efend, or (R)un? ")
 
             if choice.upper() == "A":
-                print("You attack the dragon!")
+                print("You attack the guardian!")
                 attack = randint(0, 1)
                 if attack == 0:
                     guardianhealth -= 1
@@ -148,7 +148,7 @@ while True:
                     print(f"Your defense holds, and you counterattack! {guardianhealth}/3")
                 else:
                     lives -= 1
-                    print(f"Your defense fails, and the dragon hits you! {lives}/3")
+                    print(f"Your defense fails, and the guardian hits you! {lives}/3")
                     if lives == 0:
                         gameStarted = 0
                         break
@@ -168,7 +168,7 @@ while True:
                 print("Invalid choice. Try again.")
                 continue
 
-            # Defeated the dragon
+            # Defeated the guardian
             if guardianhealth == 0:
                 print(f"{Fore.GREEN}Congratulations! You defeated the Guardian and completed the game!{Fore.WHITE}")
                 gameStarted = 0
