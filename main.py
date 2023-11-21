@@ -4,6 +4,8 @@ from colorama import Fore
 # VARIABLES
 turn = 0
 lives = 3
+maxlives = 3
+dead = False
 guardianhealth = 3
 gameStarted = 0
 
@@ -33,11 +35,12 @@ while True:
         # AREA 1
         if gameStarted == 1 and area == 1:
             ans = input("You have walked into a temple and are greeted with 3 doors\n(N)orth, (E)ast, (S)outh, (W)est: ")
-            if ans.upper() == "N": #COMPLETE, FLOOR 2, 50/50 +1 LIFE
+            if ans.upper() == "N": #COMPLETE, FLOOR 2, 50/50 +2 LIFE
                 nans = input("You walk into a room with a chest. Do you open it? (Y)es, (N)o: ")
 
                 if nans.upper() == "Y":
                     lives += 2
+                    maxlives = 5
                     print("You open the chest and recieve +2 life, you also proceed to the next floor.")
                     area = 2
                 if nans.upper() == "N":
@@ -125,18 +128,12 @@ while True:
                 if attack == 0:
                     guardianhealth -= 1
                     print(f"You hit the Guardian! {guardianhealth}/3")
-                    lives -= 1
-                    if lives == 0:
-                        gameStarted = 0
-                        break
-                    else:
-                        print(f"You still have {lives} lives")
+                    
                 else:
-                    print(f"Your attack misses, and the Guardian counterattacks! {lives}/3")
                     lives -= 1
+                    print(f"Your attack misses, and the Guardian counterattacks! {lives}/{maxlives}")
                     if lives == 0:
-                        gameStarted = 0
-                        break
+                        dead = True
                     else:
                         print(f"You still have {lives} lives")
 
@@ -150,8 +147,7 @@ while True:
                     lives -= 1
                     print(f"Your defense fails, and the guardian hits you! {lives}/3")
                     if lives == 0:
-                        gameStarted = 0
-                        break
+                        dead = True
                     else:
                         print(f"You still have {lives} lives")
 
@@ -159,8 +155,7 @@ while True:
                 print("You try to run, but the Guardian catches you!")
                 lives -= 1
                 if lives == 0:
-                    gameStarted = 0
-                    break
+                    dead = True
                 else:
                     print(f"You still have {lives} lives")
 
@@ -174,10 +169,10 @@ while True:
                 print(f"You completed the game in {turn} turns")
                 gameStarted = 0
                 break
-            elif lives == 0:
+            elif dead == True:
                 print("You were defeated by the Guardian. Game over.")
                 gameStarted = 0
-                continue
+                break
 
     # ERROR HANDLING
     except ValueError:
